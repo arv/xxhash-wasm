@@ -1,4 +1,10 @@
-# xxhash-wasm
+# xxhash-wasm (with workerd support)
+
+This is a fork of [jungomi/xxhash-wasm](https://github.com/jungomi/xxhash-wasm)
+with added support for [Cloudflare
+Workers](https://developers.cloudflare.com/workers/runtime-apis/webassembly/javascript/).
+This is done by introducing a [conditional
+export](https://developers.cloudflare.com/workers/wrangler/bundling/#conditional-exports).
 
 [![Node.js][actions-nodejs-badge]][actions-nodejs-link]
 [![npm][npm-badge]][npm-link]
