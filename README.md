@@ -1,13 +1,19 @@
-# xxhash-wasm
+# xxhash-wasm (with workerd support)
+
+This is a fork of [jungomi/xxhash-wasm](https://github.com/jungomi/xxhash-wasm)
+with added support for [Cloudflare
+Workers](https://developers.cloudflare.com/workers/runtime-apis/webassembly/javascript/).
+This is done by introducing a [conditional
+export](https://developers.cloudflare.com/workers/wrangler/bundling/#conditional-exports).
 
 [![Node.js][actions-nodejs-badge]][actions-nodejs-link]
 [![npm][npm-badge]][npm-link]
 
-🚨 *** The `v1.0.0` release brought an up to 3-4x performance
+🚨 **_ The `v1.0.0` release brought an up to 3-4x performance
 improvement and a streaming API. There were some breaking changes and
 [new engine requirements](#engine-requirements). For details see the
 [`v1.0.0` release notes][release-notes-v1.0.0], which can also be found in the
-[CHANGELOG.md](CHANGELOG.md).***
+[CHANGELOG.md](CHANGELOG.md)._**
 
 A WebAssembly implementation of [xxHash][xxhash], a fast non-cryptographic hash
 algorithm. It can be called seamlessly from JavaScript. You can use it like any
@@ -18,23 +24,23 @@ setup needed.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Installation](#installation)
-  * [From npm](#from-npm)
-  * [From Unpkg](#from-unpkg)
-    * [ES Modules](#es-modules)
-    * [UMD build](#umd-build)
-* [Usage](#usage)
-  * [Streaming Example](#streaming-example)
-  * [Node](#node)
-* [Performance](#performance)
-  * [Engine Requirements](#engine-requirements)
-* [API](#api)
-  * [h32](#h32)
-  * [h64](#h64)
-  * [Streaming](#streaming)
-* [Comparison to xxhashjs](#comparison-to-xxhashjs)
-  * [Benchmarks](#benchmarks)
-  * [Bundle size](#bundle-size)
+- [Installation](#installation)
+  - [From npm](#from-npm)
+  - [From Unpkg](#from-unpkg)
+    - [ES Modules](#es-modules)
+    - [UMD build](#umd-build)
+- [Usage](#usage)
+  - [Streaming Example](#streaming-example)
+  - [Node](#node)
+- [Performance](#performance)
+  - [Engine Requirements](#engine-requirements)
+- [API](#api)
+  - [h32](#h32)
+  - [h64](#h64)
+  - [Streaming](#streaming)
+- [Comparison to xxhashjs](#comparison-to-xxhashjs)
+  - [Benchmarks](#benchmarks)
+  - [Bundle size](#bundle-size)
 
 <!-- vim-markdown-toc -->
 
@@ -79,7 +85,7 @@ manually fetch it and create a new WebAssembly instance.
 import xxhash from "xxhash-wasm";
 
 // Creates the WebAssembly instance.
-xxhash().then(hasher => {
+xxhash().then((hasher) => {
   const input = "The string that is being hashed";
 
   // 32-bit version
@@ -173,11 +179,11 @@ approach to encoding, as `encodeInto` is forced to allocate 3-times the string
 length to account for the chance the input string contains high-byte-count
 code units.
 
-*If possible, defer the encoding of the string to the hashing, unless you need
+_If possible, defer the encoding of the string to the hashing, unless you need
 to use the encoded string (bytes) for other purposes as well, or you are
 creating the bytes differently (e.g. different encoding), in which case it's
 much more efficient to use the `h**Raw` APIs instead of having to unnecessarily
-convert them to a string first.*
+convert them to a string first._
 
 ### Engine Requirements
 
@@ -192,11 +198,11 @@ Notably, these include:
 Taking all of these requirements into account, `xxhash-wasm` should be
 compatible with:
 
-* Chrome >= 85
-* Edge >= 79
-* Firefox >= 79
-* Safari >= 15.0
-* Node >= 15.0
+- Chrome >= 85
+- Edge >= 79
+- Firefox >= 79
+- Safari >= 15.0
+- Node >= 15.0
 
 If support for an older engine is required, `xxhash-wasm@0.4.2` is available
 with much broader engine support, but 3-4x slower hashing performance.
@@ -309,19 +315,19 @@ sense to always create a new WebAssembly instance.
 ### Benchmarks
 
 Benchmarks are using [Benchmark.js][benchmarkjs] with random strings of
-different lengths. *Higher is better*
+different lengths. _Higher is better_
 
-| String length             | xxhashjs 32-bit    | xxhashjs 64-bit    | xxhash-wasm 32-bit      | xxhash-wasm 64-bit      |
-| ------------------------: | ------------------ | ------------------ | ----------------------- | ----------------------- |
-| 1 byte                    | 513,517 ops/sec    | 11,896 ops/sec     | ***5,752,446 ops/sec*** | 4,438,501 ops/sec       |
-| 10 bytes                  | 552,133 ops/sec    | 12,953 ops/sec     | ***6,240,640 ops/sec*** | 4,855,340 ops/sec       |
-| 100 bytes                 | 425,277 ops/sec    | 10,838 ops/sec     | ***5,470,011 ops/sec*** | 4,314,904 ops/sec       |
-| 1,000 bytes               | 102,165 ops/sec    | 6,697 ops/sec      | 3,283,526 ops/sec       | ***3,332,556 ops/sec*** |
-| 10,000 bytes              | 13,010 ops/sec     | 1,452 ops/sec      | 589,068 ops/sec         | ***940,350 ops/sec***   |
-| 100,000 bytes             | 477 ops/sec        | 146 ops/sec        | 61,824 ops/sec          | ***98,959 ops/sec***    |
-| 1,000,000 bytes           | 36.40 ops/sec      | 12.93 ops/sec      | 5,122 ops/sec           | ***8,632 ops/sec***     |
-| 10,000,000 bytes          | 3.12 ops/sec       | 1.19 ops/sec       | 326 ops/sec             | ***444 ops/sec***       |
-| 100,000,000 bytes         | 0.31 ops/sec       | 0.13 ops/sec       | 27.84 ops/sec           | ***34.56 ops/sec***     |
+|     String length | xxhashjs 32-bit | xxhashjs 64-bit | xxhash-wasm 32-bit      | xxhash-wasm 64-bit      |
+| ----------------: | --------------- | --------------- | ----------------------- | ----------------------- |
+|            1 byte | 513,517 ops/sec | 11,896 ops/sec  | **_5,752,446 ops/sec_** | 4,438,501 ops/sec       |
+|          10 bytes | 552,133 ops/sec | 12,953 ops/sec  | **_6,240,640 ops/sec_** | 4,855,340 ops/sec       |
+|         100 bytes | 425,277 ops/sec | 10,838 ops/sec  | **_5,470,011 ops/sec_** | 4,314,904 ops/sec       |
+|       1,000 bytes | 102,165 ops/sec | 6,697 ops/sec   | 3,283,526 ops/sec       | **_3,332,556 ops/sec_** |
+|      10,000 bytes | 13,010 ops/sec  | 1,452 ops/sec   | 589,068 ops/sec         | **_940,350 ops/sec_**   |
+|     100,000 bytes | 477 ops/sec     | 146 ops/sec     | 61,824 ops/sec          | **_98,959 ops/sec_**    |
+|   1,000,000 bytes | 36.40 ops/sec   | 12.93 ops/sec   | 5,122 ops/sec           | **_8,632 ops/sec_**     |
+|  10,000,000 bytes | 3.12 ops/sec    | 1.19 ops/sec    | 326 ops/sec             | **_444 ops/sec_**       |
+| 100,000,000 bytes | 0.31 ops/sec    | 0.13 ops/sec    | 27.84 ops/sec           | **_34.56 ops/sec_**     |
 
 `xxhash-wasm` outperforms `xxhashjs` significantly, the 32-bit is up to 90 times
 faster (generally increases as the size of the input grows), and the 64-bit is
@@ -336,46 +342,46 @@ making it suitable for use in a wide variety of situations, where
 non-cryptographic hashes are acceptable. Benchmarks from an x64 MacBook Pro
 running Node 17.3:
 
-| String length             | Node `crypto` md5  | Node `crypto` sha1 |  xxhash-wasm 64-bit     |
-| ------------------------: | ------------------ | ------------------ | ----------------------- |
-| 1 byte                    | 342,924 ops/sec    | 352,825 ops/sec    | ***4,438,501 ops/sec*** |
-| 10 bytes                  | 356,596 ops/sec    | 352,209 ops/sec    | ***4,855,340 ops/sec*** |
-| 100 bytes                 | 354,898 ops/sec    | 355,024 ops/sec    | ***4,314,904 ops/sec*** |
-| 1,000 bytes               | 249,242 ops/sec    | 271,383 ops/sec    | ***3,332,556 ops/sec*** |
-| 10,000 bytes              | 62,896 ops/sec     | 80,986 ops/sec     | ***940,350 ops/sec***   |
-| 100,000 bytes             | 7,316 ops/sec      | 10,198 ops/sec     | ***98,959 ops/sec***    |
-| 1,000,000 bytes           | 698 ops/sec        | 966 ops/sec        | ***8,632 ops/sec***     |
-| 10,000,000 bytes          | 58.98 ops/sec      | 79.78 ops/sec      | ***444 ops/sec***       |
-| 100,000,000 bytes         | 6.30 ops/sec       | 8.20 ops/sec       | ***34.56 ops/sec***     |
+|     String length | Node `crypto` md5 | Node `crypto` sha1 | xxhash-wasm 64-bit      |
+| ----------------: | ----------------- | ------------------ | ----------------------- |
+|            1 byte | 342,924 ops/sec   | 352,825 ops/sec    | **_4,438,501 ops/sec_** |
+|          10 bytes | 356,596 ops/sec   | 352,209 ops/sec    | **_4,855,340 ops/sec_** |
+|         100 bytes | 354,898 ops/sec   | 355,024 ops/sec    | **_4,314,904 ops/sec_** |
+|       1,000 bytes | 249,242 ops/sec   | 271,383 ops/sec    | **_3,332,556 ops/sec_** |
+|      10,000 bytes | 62,896 ops/sec    | 80,986 ops/sec     | **_940,350 ops/sec_**   |
+|     100,000 bytes | 7,316 ops/sec     | 10,198 ops/sec     | **_98,959 ops/sec_**    |
+|   1,000,000 bytes | 698 ops/sec       | 966 ops/sec        | **_8,632 ops/sec_**     |
+|  10,000,000 bytes | 58.98 ops/sec     | 79.78 ops/sec      | **_444 ops/sec_**       |
+| 100,000,000 bytes | 6.30 ops/sec      | 8.20 ops/sec       | **_34.56 ops/sec_**     |
 
 If suitable for your use case, the `Raw` API offers significant throughput
 improvements over the string-hashing API, particularly for smaller inputs,
 assuming that you have access to the `Uint8Array` already (see also the
 [Performance section](#performance)):
 
-| String length             | xxhash-wasm 64-bit Raw  |  xxhash-wasm 64-bit |
-| ------------------------: | ----------------------- | ------------------- |
-| 1 byte                    | ***9,342,811 ops/sec*** | 4,438,501 ops/sec   |
-| 10 bytes                  | ***9,668,989 ops/sec*** | 4,855,340 ops/sec   |
-| 100 bytes                 | ***8,775,845 ops/sec*** | 4,314,904 ops/sec   |
-| 1,000 bytes               | ***5,541,403 ops/sec*** | 3,332,556 ops/sec   |
-| 10,000 bytes              | ***1,079,866 ops/sec*** | 940,350 ops/sec     |
-| 100,000 bytes             | ***113,350 ops/sec***   | 98,959 ops/sec      |
-| 1,000,000 bytes           | ***9,779 ops/sec***     | 8,632 ops/sec       |
-| 10,000,000 bytes          | ***563 ops/sec***       | 444 ops/sec         |
-| 100,000,000 bytes         | ***43.77 ops/sec***     | 34.56 ops/sec       |
+|     String length | xxhash-wasm 64-bit Raw  | xxhash-wasm 64-bit |
+| ----------------: | ----------------------- | ------------------ |
+|            1 byte | **_9,342,811 ops/sec_** | 4,438,501 ops/sec  |
+|          10 bytes | **_9,668,989 ops/sec_** | 4,855,340 ops/sec  |
+|         100 bytes | **_8,775,845 ops/sec_** | 4,314,904 ops/sec  |
+|       1,000 bytes | **_5,541,403 ops/sec_** | 3,332,556 ops/sec  |
+|      10,000 bytes | **_1,079,866 ops/sec_** | 940,350 ops/sec    |
+|     100,000 bytes | **_113,350 ops/sec_**   | 98,959 ops/sec     |
+|   1,000,000 bytes | **_9,779 ops/sec_**     | 8,632 ops/sec      |
+|  10,000,000 bytes | **_563 ops/sec_**       | 444 ops/sec        |
+| 100,000,000 bytes | **_43.77 ops/sec_**     | 34.56 ops/sec      |
 
 ### Bundle size
 
 Both libraries can be used in the browser and they provide a UMD bundle. The
 bundles are self-contained, that means they can be included and used without
 having to add any other dependencies. The table shows the bundle size of the
-minified versions. *Lower is better*.
+minified versions. _Lower is better_.
 
-|                | xxhashjs   | xxhash-wasm   |
-| -------------- | ---------- | ------------- |
-| Bundle size    | 41.5kB     | ***11.4kB***  |
-| Gzipped Size   | 10.3kB     | ***2.3kB***   |
+|              | xxhashjs | xxhash-wasm  |
+| ------------ | -------- | ------------ |
+| Bundle size  | 41.5kB   | **_11.4kB_** |
+| Gzipped Size | 10.3kB   | **_2.3kB_**  |
 
 [actions-nodejs-badge]: https://github.com/jungomi/xxhash-wasm/actions/workflows/nodejs.yml/badge.svg
 [actions-nodejs-link]: https://github.com/jungomi/xxhash-wasm/actions/workflows/nodejs.yml
