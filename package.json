@@ -1,5 +1,5 @@
 {
-  "name": "xxhash-wasm",
+  "name": "@rocicorp/xxhash-wasm",
   "version": "1.1.0",
   "description": "A WebAssembly implementation of xxHash",
   "type": "module",
@@ -16,7 +16,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jungomi/xxhash-wasm.git"
+    "url": "https://github.com/rocicorp/xxhash-wasm.git"
   },
   "files": [
     "cjs",
@@ -29,7 +29,8 @@
     "xxhash",
     "hash",
     "wasm",
-    "webassembly"
+    "webassembly",
+    "workerd"
   ],
   "scripts": {
     "build": "yarn run build-wasm && yarn run build-js",
