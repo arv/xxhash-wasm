@@ -8,24 +8,24 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 19.x]
+        node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install binaryen
-        yarn
-    - name: Build
-      run: yarn build
-    - name: Lint
-      run: yarn lint
-    - name: Test Coverage
-      run: yarn test-coverage
-    - name: Bundle Size
-      run: yarn size
+      - uses: actions/checkout@v3
+      - name: Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install binaryen
+          yarn
+      - name: Build
+        run: yarn build
+      - name: Lint
+        run: yarn lint
+      - name: Test Coverage
+        run: yarn test-coverage
+      - name: Bundle Size
+        run: yarn size
