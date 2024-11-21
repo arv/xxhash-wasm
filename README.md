@@ -1,5 +1,9 @@
 # xxhash-wasm (with workerd support)
 
+## Deprecated
+
+**The changes in this repo have now been upstreamed.**
+
 This is a fork of [jungomi/xxhash-wasm](https://github.com/jungomi/xxhash-wasm)
 with added support for [Cloudflare
 Workers](https://developers.cloudflare.com/workers/runtime-apis/webassembly/javascript/).
